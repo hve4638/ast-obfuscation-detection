@@ -1,8 +1,0 @@
-torchaudio
-scipy
-matplotlib
-pillow
-librosa
-numpy<2.0
-requests
-bs4
