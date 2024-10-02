@@ -1,5 +1,6 @@
 # $target = "./dataset/attack/8c5d.ps1"
-$target = "./dataset/normal/Get.ps1"
+# $target = "../dataset/normal/Get.ps1"
+$target = $args[0]
 
 $ast = [System.Management.Automation.Language.Parser]::ParseFile($target, [ref]$null, [ref]$null)
 
