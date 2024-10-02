@@ -1,7 +1,8 @@
 # 출력 파일
-dataset/
-export/
-output/
+/dataset/
+/export/
+/output/
+/target/
 
 # 환경설정 파일
 venv/
