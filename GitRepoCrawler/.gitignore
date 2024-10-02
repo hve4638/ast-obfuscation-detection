@@ -1,0 +1,10 @@
+dataset/
+export/
+target/
+venv/
+
+*.png
+*.ps1
+
+test.py
+token.txt
