@@ -76,3 +76,14 @@ $path4 = # Ast4Gram을 저장할 경로
 Set-Content -Path $path3 -Value $Ast3Grams
 Set-Content -Path $path4 -Value $Ast4Grams
 ```
+
+## 디렉토리 전체 파일의 Ast, n-gram 추출하여 저장하기
+```bash
+# 경로 설정 (마지막에 \ 붙일것!)
+$path = # 디렉토리 경로
+$path3 = # 3-gram 저장 경로
+$path4 = # 4-gram 저장 경로
+
+# path 디렉토리의 전체 파일의 3,4-gram을 각각path3, path4에 저장
+GetAstNGrams -path $path -path3 $path3 -path4 $path4
+```
