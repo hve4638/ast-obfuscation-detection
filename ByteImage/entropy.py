@@ -5,6 +5,7 @@ from PIL import Image
 import sys
 import math
 import argparse
+import json
 parser = argparse.ArgumentParser()
 
 parser.add_argument('filename')
@@ -17,7 +18,7 @@ args = parser.parse_args()
 
 def get_dataset_path(dirpath):
     '''
-    디렉토리 
+    디렉토리
     '''
     result = []
     for dirpath, _, filenames in os.walk(dirpath):
@@ -60,9 +61,9 @@ def convert_log(value:int, base:int):
         print(value, base)
         raise
 
-def export_image(filename:str, byte_counter:Counter):
+def parse_byte_frequency(byte_counter:Counter):
     '''
-    각 바이트 빈도수를 기준으로 16x16 이미지 생성
+    각 바이트 빈도수를 기준으로 bytes 이미지를 생성하기 위한 1차원 배열 생성후 반환
     '''
     # 16*16 이미지 기준이므로 size를 16으로 지정
     size = 16
@@ -84,9 +85,17 @@ def export_image(filename:str, byte_counter:Counter):
     if args.verbose:
         for pixel1d in pixels:
             print(pixel1d)
+    return pixels
+
+def export_image(filename:str, pixel1d, size=16):
+    pixels = [pixel1d[i * size:(i + 1) * size] for i in range(size)]
+    
     final_image = Image.fromarray(np.array(pixels, dtype=np.uint8), 'L')
     final_image.save(filename)
 
+def export_json(filename:str, pixel1d):
+    with open(filename, 'w') as f:
+        json.dump(pixel1d, f)
 
 def print_byte_frequency(byte_counter:Counter):
     '''
@@ -96,11 +105,18 @@ def print_byte_frequency(byte_counter:Counter):
     for value, frequency in byte_counter.most_common():
         print("0x{:02x}: {:<6} {}".format(value, frequency, "█" * int(frequency * 80/max_prob)))
 
+def remove_parentdirs(target_path:str):
+    return target_path.replace('../').replace('..\\')
+
 if __name__ == '__main__':
     datasetpath = get_dataset_path(args.filename)
 
     for dir, file in datasetpath:
-        os.makedirs(f'{args.output}/{dir}', exist_ok=True)
+        exportImagePath = f'{args.output}/images/{dir}'
+        exportBytesPath = f'{args.output}/bytes/{dir}'
+        os.makedirs(exportImagePath, exist_ok=True)
+        os.makedirs(exportBytesPath, exist_ok=True)
+        outdir = remove_parentdirs(dir)
 
         # 바이트 빈도수 계산
         counter = count_byte_frequency(f'{dir}/{file}')
@@ -110,8 +126,10 @@ if __name__ == '__main__':
             print_byte_frequency(counter)
         
         try:
-            # 16x16 이미지 추출
-            export_image(f'./{args.output}/{dir}/{file}.png', counter)
+            pixel1d = parse_byte_frequency(counter)
+            
+            export_image(f'./{exportImagePath}/{file}.png', pixel1d)
+            export_json(f'./{exportBytesPath}/{file}.png', pixel1d)
         except:
             print('Error Occured!')
             print(f'{dir}/{file}')
