@@ -106,7 +106,7 @@ def print_byte_frequency(byte_counter:Counter):
         print("0x{:02x}: {:<6} {}".format(value, frequency, "█" * int(frequency * 80/max_prob)))
 
 def remove_parentdirs(target_path:str):
-    return target_path.replace('../').replace('..\\')
+    return target_path.replace('../', './').replace('..\\', '.\\')
 
 if __name__ == '__main__':
     datasetpath = get_dataset_path(args.filename)
