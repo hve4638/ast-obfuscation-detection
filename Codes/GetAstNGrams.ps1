@@ -7,7 +7,7 @@ param (
     [String]$dir_name
 )
 
-$scriptArr = Get-ChildItem -Path $path -Name
+$scriptArr = Get-ChildItem -Path $path -Name -Recurse -Include *.ps1
 $cnt = 0
 
 foreach ($sc in $scriptArr){
