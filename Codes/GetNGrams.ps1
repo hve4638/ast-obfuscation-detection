@@ -16,7 +16,7 @@ $nGrams = @()
 # InputArr로부터 N-Gram 추출
 for ($i = 0; $i -le $InputArr.Length - $N; $i++) {
 	$nGram = $InputArr[$i..($i + $N - 1)] -join ','
-	$nGrams += "($nGram)"
+	$nGrams += "$nGram"
 }
 
 return $nGramsparam (

@@ -81,9 +81,13 @@ Set-Content -Path $path4 -Value $Ast4Grams
 ```bash
 # 경로 설정 (마지막에 \ 붙일것!)
 $path = # 디렉토리 경로
+$path1 = # Ast 저장 경로
+$path2 = # 2-gram 저장 경로
 $path3 = # 3-gram 저장 경로
 $path4 = # 4-gram 저장 경로
 
-# path 디렉토리의 전체 파일의 3,4-gram을 각각path3, path4에 저장
-GetAstNGrams -path $path -path3 $path3 -path4 $path4
+$dir_name = # 데이터셋 이름
+
+# path 디렉토리의 전체 파일의 ast, 2,3,4-gram 저장
+GetAstNGrams -path $path -path1 $path1 -path2 $path2 -path3 $path3 -path4 $path4 -dir_name $dir_name
 ```
