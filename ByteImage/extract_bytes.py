@@ -26,7 +26,7 @@ def extract_byte(filename):
             data = f.read()
         return list(data)
     except Exception as e:
-        print('error', e)
+        print(filename, e)
         return None
 
 def main():
