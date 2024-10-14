@@ -21,9 +21,7 @@ def get_export_path(export_path:str, *paths:list[str])->str:
 
 def extract_byte(filename):
     try:
-        utils.assert_utf8(filename)
-        with open(filename, 'rb') as f:
-            data = f.read()
+        data = utils.read_bytes_as_utf8(filename)
         return list(data)
     except Exception as e:
         print(filename, e)

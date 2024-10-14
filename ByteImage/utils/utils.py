@@ -1,5 +1,17 @@
 import os
 import json
+from .assert_encoding import is_utf8, is_utf16le, is_utf16be
+
+def read_bytes_as_utf8(filename:str) -> str:
+    if is_utf8(filename):
+        with open(filename, 'r', encoding='utf-8') as f:
+            return f.read().encode('utf-8')
+    elif is_utf16le(filename):
+        with open(filename, 'r', encoding='utf-16le') as f:
+            return f.read().encode('utf-8')
+    elif is_utf16be(filename):
+        with open(filename, 'r', encoding='utf-16be') as f:
+            return f.read().encode('utf-8')
 
 def read_json(filename:str) -> dict|list:
     with open(filename, 'r') as f:
@@ -32,6 +44,7 @@ def get_path_recursive(target, on_filter=None)->list[tuple[str, str]]:
         result.extend((dirpath, filename) for filename in filtered)
     return result
 
-def assert_utf8(filename:str):
+
+def read_as_utf8(filename:str)->str:
     with open(filename, 'r', encoding='utf-8') as f:
-        f.readline()
+        return f.read()

@@ -1,0 +1,1 @@
+from . import assert_encoding
