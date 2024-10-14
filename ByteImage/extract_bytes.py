@@ -1,5 +1,5 @@
 from collections import Counter
-import os
+import os, csv
 import numpy as np
 import argparse
 import utils
@@ -8,6 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('filename')
 parser.add_argument('--cache', default=None)
 parser.add_argument('-O', '--output', default='./export')
+parser.add_argument('--csv', default=None)
 
 args = parser.parse_args()
 
@@ -40,14 +41,33 @@ def main():
         if args.cache is not None:
             utils.write_json(args.cache, cache)
     
-    os.makedirs(args.output, exist_ok=True)
+    if args.csv is not None:
+        write_as_csv(args.csv, ls)
+    else:
+        write_as_splite_file(args.output, ls)
+
+def write_as_csv(export_path, ls):
+    export_directory, _ = os.path.split(export_path)
+    
+    os.makedirs(export_directory, exist_ok=True)
+    with open(export_path, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['path', 'filename', 'bytes'])
+        
+        for dirpath, filename in ls:
+            target_path = os.path.join(dirpath, filename)
+            byte_sequence = extract_byte(target_path)
+            if byte_sequence is not None:
+                writer.writerow([dirpath, filename, byte_sequence])
+
+def write_as_splite_file(export_directory, ls):
+    os.makedirs(export_directory, exist_ok=True)
     for dirpath, filename in ls:
         target_path = os.path.join(dirpath, filename)
         byte_sequence = extract_byte(target_path)
         if byte_sequence is not None:
-            output_path = get_export_path(args.output, dirpath, filename + '.bytes')
+            output_path = get_export_path(export_directory, dirpath, filename + '.bytes')
             utils.write_json(output_path, byte_sequence)
-
 
 if __name__ == '__main__':
     main()
