@@ -9,6 +9,7 @@ parser.add_argument('filename')
 parser.add_argument('--cache', default=None)
 parser.add_argument('-O', '--output', default='./export')
 parser.add_argument('--csv', default=None)
+parser.add_argument('--ext', default='.ps1')
 
 args = parser.parse_args()
 
@@ -33,13 +34,19 @@ def main():
         cache = utils.read_json(args.cache)
         ls = cache['ls']
     else:
-        ls = utils.get_path_recursive(args.filename, lambda x: x.endswith('.py'))
+        ls = utils.get_path_recursive(args.filename, lambda x: x.endswith(args.ext))
         cache = {
             'filename' : args.filename,
             'ls' : ls
         }
         if args.cache is not None:
             utils.write_json(args.cache, cache)
+
+    if not ls:
+        abspath = os.path.abspath(args.filename)
+        print(f"No files found : '{abspath}'")
+        if args.cache:
+            os.remove(args.cache)
     
     if args.csv is not None:
         write_as_csv(args.csv, ls)
