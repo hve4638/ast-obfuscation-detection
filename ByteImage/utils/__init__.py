@@ -1,2 +1,2 @@
-from . import assert_encoding
-from . import utils
+from .assert_encoding import *
+from .utils import *
