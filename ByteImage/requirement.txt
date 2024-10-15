@@ -6,3 +6,4 @@ librosa
 numpy<2.0
 requests
 bs4
+pandas
