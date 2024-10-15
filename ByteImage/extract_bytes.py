@@ -55,7 +55,7 @@ def write_as_csv(export_path, ls):
     export_directory, _ = os.path.split(export_path)
     
     os.makedirs(export_directory, exist_ok=True)
-    with open(export_path, 'w', newline='') as f:
+    with open(export_path, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['path', 'filename', 'bytes'])
         
