@@ -1,17 +1,16 @@
 import os
 import json
-from .assert_encoding import is_utf8, is_utf16le, is_utf16be
+from .assert_encoding import is_utf8, is_utf16le, is_utf16be, try_read
 
 def read_bytes_as_utf8(filename:str) -> str:
-    if is_utf8(filename):
-        with open(filename, 'r', encoding='utf-8') as f:
-            return f.read().encode('utf-8')
-    elif is_utf16le(filename):
-        with open(filename, 'r', encoding='utf-16le') as f:
-            return f.read().encode('utf-8')
-    elif is_utf16be(filename):
-        with open(filename, 'r', encoding='utf-16be') as f:
-            return f.read().encode('utf-8')
+    data = try_read(filename, 'utf-8')\
+            or try_read(filename, 'utf-16le')\
+            or try_read(filename, 'utf-16be')\
+            or try_read(filename, 'cp949')
+    if data is None:
+        print(f"Failed to read : {filename}")
+        raise 'Failed to read'
+    return data.encode('utf-8')
 
 def read_json(filename:str) -> dict|list:
     with open(filename, 'r') as f:
