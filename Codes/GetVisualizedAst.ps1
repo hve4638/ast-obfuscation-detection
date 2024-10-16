@@ -35,8 +35,9 @@ function Visualize-Tree($Id, $Indent = 0) {
 	# 현재 id에 대한 노드 탐색
 	$hierarchy[$id] | ForEach-Object {
 		# 트리 레벨, 노드 타입, 코드의 위치와 범위 출력
-		'{0}[{1}]: {2}' -f $space, $_.GetType().Name, $_.Extent
-
+		'{0}[{1}]' -f $space, $_.GetType().Name
+		# 내용도 포함하여 출력
+		# '{0}[{1}]: {2}' -f $space, $_.GetType().Name, $_.Extent
 		# 자신의 해시 코드 저장
 		$newid = $_.GetHashCode()
 		# 자식 노드 탐색
