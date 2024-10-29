@@ -1,6 +1,3 @@
-# DeptCalc.ps1
-# 파워셸 스크립트에서(1개) AST를 탐색하여 4가지 특성을 추출(Total Nodes, Node Types, Max Depth, Average Depth)
-
 # 파워쉘 스크립트 경로 지정
 param(
     [String]$path,
@@ -45,19 +42,22 @@ function Calculate-ASTMetrics {
     if ($currentDepth -gt $script:maxDepth) {
         $script:maxDepth = $currentDepth
     }
-    # 
+    # 리프 노드가 아닐 때
     if ($currentDepth -gt $script:leafDepth){
         $script:leafDepth = $currentDepth
     }
+    # 리프 노드일 때
     elseif($script:leafDepth -ge $currentDepth){
         $script:totalLeafDepth +=$script:leafDepth
         $script:totalLeafNodes++
         # Write-Output "LeafDepth: $script:leafDepth"
         # Write-Output "totalLeafDepth: $script:totalLeafDepth"
+        # 최소 깊이 갱신
         if($script:leafDepth -lt $script:minDepth){
             $script:minDepth = $script:leafDepth
             # Write-Output "minDepth: $script:minDepth"
         }
+        # 리프 노드 빠져나온 경우 깊이 초기화
         if ($script:leafDepth -gt $currentDepth){
             $script:leafDepth = 0
         }
@@ -87,18 +87,18 @@ function Calculate-ASTMetrics {
 Calculate-ASTMetrics -node $ast -currentDepth 0
 
 # 마지막 리프 노드 계산
-    $script:totalLeafDepth +=$script:leafDepth
-    $script:totalLeafNodes++
-    # Write-Output "LeafDepth: $script:leafDepth"
-    # Write-Output "totalLeafDepth: $script:totalLeafDepth"
-    if($script:minDepth -gt $script:leafDepth){
-        $script:minDepth = $script:leafDepth
-        # Write-Output "minDeapth: $minDepth"
-    }
+$script:totalLeafDepth +=$script:leafDepth
+$script:totalLeafNodes++
+# Write-Output "LeafDepth: $script:leafDepth"
+# Write-Output "totalLeafDepth: $script:totalLeafDepth"
+if($script:minDepth -gt $script:leafDepth){
+    $script:minDepth = $script:leafDepth
+    # Write-Output "minDeapth: $minDepth"
+}
 
-# 평균 깊이 계산
+# 전체 노드의 평균 깊이 계산
 $averageDepth = if ($totalNodes -gt 0) { [math]::Round($totalDepth / $totalNodes, 2) } else { 0 }
-#
+# 리프 노드의 평균 깊이 계산
 $averageLeafDepth =  if ($totalLeafNodes -gt 0) { [math]::Round($totalLeafDepth / $totalLeafNodes, 2) } else { 0 }
 
 # 결과 출력
@@ -112,6 +112,8 @@ Write-Output "Average Depth: $averageDepth"
 Write-Output "Total Leaf Depth: $totalLeafDepth"
 Write-Output "Average Leaf Depth: $averageLeafDepth"
 #>
+
+# 결과를 담은 변수
 $result = [PSCustomObject]@{
     Filename       = $filename
     TotalNodes     = $totalNodes
