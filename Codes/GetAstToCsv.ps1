@@ -25,7 +25,8 @@ foreach ($sc in $scriptArr){
     # 특성 추출하여 .csv로 저장
     $pro = .\GetProperty -path $dirpath | Export-Csv -path $npath -NoTypeInformation
     # 각 파일에 대한 깊이 정보
-    $result = .\DepthCal2 -path $dirpath -filename $sc
+    $fname = $dir_name + '_' + $cnt
+    $result = .\DepthCal2 -path $dirpath -filename $fname
     $cnt += 1
   }
   # 깊이 정보 배열에 추가
@@ -34,4 +35,4 @@ foreach ($sc in $scriptArr){
 # 파일 저장 형식 지정
 $p = $pathtotal + $dir_name+'.csv'
 # 깊이 정보 .csv 파일 생성
-# $results | Export-Csv -path $p -NoTypeInformation
+$results | Export-Csv -path $p -NoTypeInformation
