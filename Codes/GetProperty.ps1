@@ -6,7 +6,6 @@ param(
 $ast = [System.Management.Automation.Language.Parser]::ParseInput((Get-Content $path), [ref]$null, [ref]$null)
     
 $results = @()
-$uniqueNodeTypes = New-Object System.Collections.Generic.HashSet[string]  # 고유 노드 타입을 추적
 $visitedNodes = New-Object System.Collections.Generic.HashSet[object]     # 중복 방지를 위한 해시셋
 
 # AST 트리를 재귀적으로 순환하며 특성 추출
@@ -15,12 +14,11 @@ function Calculate-ASTMetrics {
 
     # 노드를 이미 방문했는지 확인
     if ($visitedNodes.Contains($node)) {
-        return
+       return
     }
     [void]$visitedNodes.Add($node)  # 방문 기록 추가 (반환값-True 무시)
 
 
-    [void]$uniqueNodeTypes.Add($node.GetType().Name)  # 반환 값 무시 - [void]
 
     # Ast 특성 변수
     if($currentDepth -eq 0){
