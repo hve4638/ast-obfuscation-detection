@@ -10,3 +10,5 @@ venv/
 
 # 임시 파일
 __pycache__/
+
+.secret
