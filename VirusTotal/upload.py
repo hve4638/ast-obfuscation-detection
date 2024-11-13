@@ -11,21 +11,29 @@ URL_VT_SCAN = 'https://www.virustotal.com/vtapi/v2/file/scan'
 URL_VT_REPORT = 'https://www.virustotal.com/vtapi/v2/file/report'
 def upload_vt(filename, api_key):
     scan = __request_scan(filename, api_key)
+    if scan is None:
+        return None
+    
     resource = scan['resource']
     time.sleep(5)
+    retires = 5
 
     while True:
         report = __request_report(resource, api_key)
-        print(report)
         if report['response_code'] == 1:
             break
         else:
             time.sleep(15)
+            retires -= 1
+            if retires < 0:
+                return None
     
-    result = report.get('scans')
     return report
 
-def __request_scan(filename:str, api_key:str):
+def __request_scan(filename:str, api_key:str, retries:int=5):
+    if retries < 0:
+        return None
+    
     with open(filename, 'rb') as file_obj:
         files = {'file': (filename, file_obj) }
 
@@ -37,12 +45,16 @@ def __request_scan(filename:str, api_key:str):
             case 204:
                 sys.stderr.write('API rate limit exceeded. Wait 15 seconds.\n')
                 time.sleep(15)
-                return __request_scan(filename, api_key)
+                return __request_scan(filename, api_key, retries-1)
             case _:
                 print('Error:', res.status_code)
                 print(res)
                 raise 'STOP'
-def __request_report(resource:str, api_key:str):
+
+def __request_report(resource:str, api_key:str, retries:int=5):
+    if retries < 0:
+        return None
+    
     params = {'apikey': api_key, 'resource': resource }
     res = requests.get(URL_VT_REPORT, params=params )
     match res.status_code:
@@ -51,7 +63,7 @@ def __request_report(resource:str, api_key:str):
         case 204:
             sys.stderr.write('API rate limit exceeded. Wait 15 seconds.\n')
             time.sleep(15)
-            return __request_report(resource, api_key)
+            return __request_report(resource, api_key, retries-1)
         case _:
             print('Error:', res.status_code)
             print(res)
