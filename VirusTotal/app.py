@@ -3,7 +3,15 @@ import csv, json
 import math
 import re, time
 from upload import upload_vt
-from secret import api_key
+try:
+    from secret import api_key
+except ImportError:
+    sys.stderr.write('secret.py가 없음\n')
+    sys.stderr.write('secret.py 를 생성하고 다음을 추가하기\n')
+    sys.stderr.write('\n')
+    sys.stderr.write('api_key=<YOUR_API_KEY>\n')
+    sys.stderr.write('\n')
+    exit(0)
 
 PASS = 0
 FAIL = 1
@@ -17,6 +25,7 @@ input_paths = [
 output_path = './export'
 
 # 데이터셋 범위
+# 2000~3000번째 데이터셋만 처리
 DATASET_RANGE = (2000, 3000)
 
 re_filename = re.compile(r'^#([0-9]+)_.*$')
