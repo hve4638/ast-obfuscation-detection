@@ -1,0 +1,14 @@
+# 출력 파일
+/dataset/
+/export/
+/export2/
+/output/
+/target/
+
+# 환경설정 파일
+venv/
+
+# 임시 파일
+__pycache__/
+
+secret.py

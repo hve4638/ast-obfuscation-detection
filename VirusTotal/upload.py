@@ -15,7 +15,7 @@ def upload_vt(filename, api_key):
         return None
     
     resource = scan['resource']
-    time.sleep(5)
+    time.sleep(30)
     retires = 5
 
     while True:
@@ -23,7 +23,7 @@ def upload_vt(filename, api_key):
         if report['response_code'] == 1:
             break
         else:
-            time.sleep(15)
+            time.sleep(60)
             retires -= 1
             if retires < 0:
                 return None
@@ -43,8 +43,8 @@ def __request_scan(filename:str, api_key:str, retries:int=5):
             case 200:
                 return res.json()
             case 204:
-                sys.stderr.write('API rate limit exceeded. Wait 15 seconds.\n')
-                time.sleep(15)
+                sys.stderr.write('API rate limit exceeded. Wait 1 minute.\n')
+                time.sleep(60)
                 return __request_scan(filename, api_key, retries-1)
             case _:
                 print('Error:', res.status_code)
@@ -61,18 +61,11 @@ def __request_report(resource:str, api_key:str, retries:int=5):
         case 200:
             return res.json()
         case 204:
-            sys.stderr.write('API rate limit exceeded. Wait 15 seconds.\n')
-            time.sleep(15)
+            sys.stderr.write('API rate limit exceeded. Wait 1 minute.\n')
+            time.sleep(60)
             return __request_report(resource, api_key, retries-1)
         case _:
             print('Error:', res.status_code)
             print(res)
             raise 'STOP'
 
-
-if __name__ == '__main__':
-    api_key = os.getenv('VT_API_KEY')
-    report = upload_vt('./HEMacro.dll', api_key)
-    with open('result.json', 'w') as f:
-        json.dump(report, f, indent=4)
-    
