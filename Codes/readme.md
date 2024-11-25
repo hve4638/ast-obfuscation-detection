@@ -104,7 +104,7 @@ GetAstToCsv -path $path -pathcsv $pathcsv -pathtotal $pathtotal -dir_name $dir_n
 ```
 
 ## GetMatrix.ipynb
------
+
 Google Drive 내의 .csv 파일을 이용하여 인접행렬을 추출, 저장
 
 ast_list_60 ; 데이터셋 내에 존재하는 60개의 전체 AST 타입을 담은 리스트
