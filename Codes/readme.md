@@ -96,9 +96,17 @@ GetAstNGrams -path $path -path1 $path1 -path2 $path2 -path3 $path3 -path4 $path4
 ```bash
 # 경로 설정 (마지막에 \ 붙일것!)
 $path = # 디렉토리 경로
-$pathcsv = # 각 파일별 Ast Ojbect 특성 추출 csv 파일 저장 경로
+$pathcsv = # 각 스크립트별 Ast Ojbect 특성 추출 csv 파일 저장 경로
 $pathtotal = # 전체 디렉토리의 Ast 깊이 특성 추출 csv 파일 저장 경로
 $dir_name = # 데이터셋 이름
 
 GetAstToCsv -path $path -pathcsv $pathcsv -pathtotal $pathtotal -dir_name $dir_name
 ```
+
+## GetMatrix.ipynb
+-----
+Google Drive 내의 .csv 파일을 이용하여 인접행렬을 추출, 저장
+
+ast_list_60 ; 데이터셋 내에 존재하는 60개의 전체 AST 타입을 담은 리스트
+
+ast_list_imp ; Feature Importance 값이 0 이상인 15개의 AST 타입을 담은 리스트
