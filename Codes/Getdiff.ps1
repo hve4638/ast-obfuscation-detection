@@ -1,5 +1,6 @@
 param(
-    [String]$path
+    [String]$path,
+    [String]$pathcsv
 )
 
 # AST 파싱
@@ -10,7 +11,7 @@ $visitedNodes = New-Object System.Collections.Generic.HashSet[object]     # 중�
 
 $totalLeafNodes = 0
 $x_diff = 0
-$leafDepth = -1
+$leafDepth = -1s
 
 
 # AST 트리를 재귀적으로 순환하며 특성 추출
@@ -84,4 +85,4 @@ function Calculate-ASTMetrics {
 # 초기 호출
 Calculate-ASTMetrics -node $ast -currentDepth 0
 
-return $results | Export-Csv -path "C:\Users\IrinaPark\Desktop\test\test3.csv" -NoTypeInformation
+return $results | Export-Csv -path $pathcsv -NoTypeInformation
